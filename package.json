@@ -4,7 +4,8 @@
   "description": "Ein kleines Tool zum tokenbasierten Einschreiben in angebotene Kurse des Alumni Lenné e.V. zu den alljährlichen Alumni Tagen",
   "main": "app.ts",
   "scripts": {
-    "start": "echo kommt noch"
+    "start": "eeho kommt noch",
+    "be:start": "nodemon --watch backend -e ts --ignore 'node_modules/**/*' --exec ts-node --project backend/tsconfig.json backend/index.ts"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,24 @@
   "bugs": {
     "url": "https://github.com/f11h/alumni-tage-tool/issues"
   },
-  "homepage": "https://github.com/f11h/alumni-tage-tool#readme"
+  "homepage": "https://github.com/f11h/alumni-tage-tool#readme",
+  "devDependencies": {
+    "@types/express": "^4.17.0",
+    "nodemon": "^1.19.1",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "@tsed/common": "^5.24.1",
+    "@tsed/core": "^5.24.1",
+    "@tsed/di": "^5.24.1",
+    "@tsed/typeorm": "^5.24.1",
+    "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.4",
+    "express": "^4.17.1",
+    "method-override": "^3.0.0",
+    "mysql2": "^1.6.5",
+    "typeorm": "^0.2.18"
+  }
 }
