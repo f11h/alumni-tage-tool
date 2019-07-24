@@ -1,8 +1,8 @@
-import {Constant, Controller, Get, Maximum, Minimum, QueryParams} from '@tsed/common';
+import {Constant, Controller, Get, QueryParams} from '@tsed/common';
 import {Course} from '../model/Course';
 import {CourseService} from '../services/CourseService';
 import {Unauthorized} from 'ts-httpexceptions';
-import {TokenService} from '../services/token.service';
+import {TokenService} from '../services/TokenService';
 
 @Controller('/courses')
 export class CourseController {
@@ -18,7 +18,7 @@ export class CourseController {
 
     @Get('/tokens')
     public tokens(
-        @QueryParams("n") count: number,
+        @QueryParams('n') count: number,
     ): string[] {
         count = count || 10;
 
@@ -31,7 +31,7 @@ export class CourseController {
         @QueryParams('auth') auth: string,
     ): Promise<Course[]> {
         if (withAttendees && auth !== this.password) {
-            throw(new Unauthorized(""));
+            throw(new Unauthorized(''));
         }
 
         return await this.courseService.getAllCourses(true);

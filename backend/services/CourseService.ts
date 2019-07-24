@@ -17,10 +17,6 @@ export class CourseService implements OnServerReady {
         this.repo = this.orm.get('default').getRepository(Course);
     }
 
-    public saveCourse(course: Course): Promise<Course> {
-        return this.repo.save(course);
-    }
-
     public async getAllCourses(withAttendees: boolean): Promise<Course[]> {
         const courses = await this.repo.find({relations: ['attendees']});
 
@@ -35,7 +31,7 @@ export class CourseService implements OnServerReady {
         return courses;
     }
 
-    public async countAttendeesForCourse(course: Course): Promise<number> {
+    /*public async countAttendeesForCourse(course: Course): Promise<number> {
         return (await this.repo.findOne(course.id, {relations: ['attendees']})).attendees.length;
-    }
+    }*/
 }

@@ -1,6 +1,5 @@
 import {Constant, Controller, Get, QueryParams} from '@tsed/common';
 import {Unauthorized} from 'ts-httpexceptions';
-import {TokenService} from '../services/token.service';
 import {Attendee} from '../model/Attendee';
 import {AttendeeService} from '../services/AttendeeService';
 
@@ -11,8 +10,7 @@ export class AttendeeController {
     private readonly password: string;
 
     public constructor(
-        private attendeeService: AttendeeService,
-        private tokenService: TokenService,
+        private attendeeService: AttendeeService
     ) {
     }
 

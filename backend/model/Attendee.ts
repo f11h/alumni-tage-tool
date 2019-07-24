@@ -1,5 +1,5 @@
 import {MaxLength, Property} from '@tsed/common';
-import {Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, Unique} from 'typeorm';
+import {Column, Entity, ManyToMany, PrimaryGeneratedColumn} from 'typeorm';
 import {Course} from './Course';
 
 @Entity()

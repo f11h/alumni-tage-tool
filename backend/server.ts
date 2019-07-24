@@ -23,6 +23,7 @@ import "@tsed/typeorm";
 })
 export class Server extends ServerLoader {
 
+    // noinspection JSUnusedGlobalSymbols
     public $onMountingMiddlewares(): void {
         this
             .use(GlobalAcceptMimesMiddleware)
