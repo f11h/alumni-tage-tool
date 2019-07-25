@@ -33,6 +33,10 @@ export class AttendeeService implements OnServerReady {
         return this.repo.findOneOrFail(id, { relations: withCourses ? ['courses'] : []});
     }
 
+    public async createAttendee(attendee: Attendee): Promise<Attendee> {
+        return this.repo.save(attendee);
+    }
+
     public async setAttendeesCourses(attendee: Attendee, courseIds: number[]) {
         const courses: Course[] = [];
         const classes: string[] = [];

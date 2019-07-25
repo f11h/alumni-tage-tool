@@ -9,7 +9,7 @@ export class Attendee {
     @Property()
     id: number;
 
-    @Column()
+    @Column({ nullable: true })
     @MaxLength(50)
     @Property()
     name: string;
@@ -19,7 +19,7 @@ export class Attendee {
     @Property()
     token: string;
 
-    @Column()
+    @Column({ nullable: true })
     @MaxLength(100)
     @Property()
     password: string;

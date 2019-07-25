@@ -5,7 +5,8 @@
   "main": "app.ts",
   "scripts": {
     "start": "eeho kommt noch",
-    "be:start": "nodemon --watch backend -e ts --ignore 'node_modules/**/*' --exec ts-node --project backend/tsconfig.json backend/index.ts"
+    "be:start": "nodemon --watch backend -e ts --ignore 'node_modules/**/*' --exec ts-node --project backend/tsconfig.json backend/index.ts",
+    "postinstall": "cd frontend && npm install"
   },
   "repository": {
     "type": "git",

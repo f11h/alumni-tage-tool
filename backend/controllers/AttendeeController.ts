@@ -1,7 +1,8 @@
-import {BodyParams, Constant, Controller, Get, PathParams, Put, QueryParams} from '@tsed/common';
-import {Unauthorized} from 'ts-httpexceptions';
-import {Attendee} from '../model/Attendee';
-import {AttendeeService} from '../services/AttendeeService';
+import { BodyParams, Constant, Controller, Get, PathParams, Post, Put, QueryParams, Response } from '@tsed/common';
+import { Unauthorized } from 'ts-httpexceptions';
+import { Attendee } from '../model/Attendee';
+import { AttendeeService } from '../services/AttendeeService';
+import { TokenService } from '../services/TokenService';
 
 @Controller('/attendees')
 export class AttendeeController {
@@ -10,7 +11,8 @@ export class AttendeeController {
     private readonly password: string;
 
     public constructor(
-        private attendeeService: AttendeeService
+        private attendeeService: AttendeeService,
+        private tokenService: TokenService,
     ) {
     }
 
@@ -28,11 +30,33 @@ export class AttendeeController {
         }
     }
 
+    @Post("/")
+    public async createAttendees(
+        @QueryParams("auth") auth: string,
+        @QueryParams("n") count: number,
+        @Response() response: Response,
+    ): Promise<Attendee[]> {
+        if (auth !== this.password) throw new Unauthorized('');
+
+        const createdAttendees: Attendee[] = [];
+        const tokens: string[] = this.tokenService.generateUniqueTokens(count);
+
+        for (const token of tokens) {
+            createdAttendees.push(await this.attendeeService.createAttendee(new Attendee({
+                courses: [],
+                token,
+            })));
+        }
+
+        response.status(201);
+        return createdAttendees;
+    }
+
     @Put('/:id/courses')
     public async setCourses(
         @PathParams('id') id: number,
         @QueryParams('token') token: string,
-        @BodyParams() courses: number[]
+        @BodyParams() courses: number[],
     ): Promise<Attendee> {
         const attendee = await this.attendeeService.getAttendeeById(id);
 
@@ -42,7 +66,7 @@ export class AttendeeController {
 
         await this.attendeeService.setAttendeesCourses(
             attendee,
-            courses
+            courses,
         );
 
         return this.attendeeService.getAttendeeById(id, true);
