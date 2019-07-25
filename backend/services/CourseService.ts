@@ -31,7 +31,11 @@ export class CourseService implements OnServerReady {
         return courses;
     }
 
-    /*public async countAttendeesForCourse(course: Course): Promise<number> {
+    public async getCourseById(id: number): Promise<Course> {
+        return this.repo.findOneOrFail(id);
+    }
+
+    public async countAttendeesForCourse(course: Course): Promise<number> {
         return (await this.repo.findOne(course.id, {relations: ['attendees']})).attendees.length;
-    }*/
+    }
 }

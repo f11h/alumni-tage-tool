@@ -22,7 +22,7 @@ export class TokenService {
 
         while (generatedTokens.length < numberOfTokens) {
             const token = this.generateToken();
-            if (!generatedTokens.includes(token)) generatedTokens.push(token);
+            if (!generatedTokens.includes(token) && !token.includes("undefined")) generatedTokens.push(token);
         }
 
         return generatedTokens;

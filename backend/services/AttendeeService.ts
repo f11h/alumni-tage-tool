@@ -3,6 +3,9 @@ import {TypeORMService} from '@tsed/typeorm';
 import {Repository} from 'typeorm';
 import {OnServerReady} from '@tsed/common';
 import {Attendee} from '../model/Attendee';
+import {Course} from '../model/Course';
+import {CourseService} from './CourseService';
+import {BadRequest} from 'ts-httpexceptions';
 
 @Injectable()
 export class AttendeeService implements OnServerReady {
@@ -10,6 +13,7 @@ export class AttendeeService implements OnServerReady {
 
     public constructor(
         private orm: TypeORMService,
+        private courseService: CourseService,
     ) {
     }
 
@@ -22,6 +26,62 @@ export class AttendeeService implements OnServerReady {
     }
 
     public getAttendeeByToken(token: string): Promise<Attendee> {
-        return this.repo.findOne({where: {token}, relations: ['courses']});
+        return this.repo.findOneOrFail({where: {token}, relations: ['courses']});
+    }
+
+    public getAttendeeById(id: number, withCourses?: boolean): Promise<Attendee> {
+        return this.repo.findOneOrFail(id, { relations: withCourses ? ['courses'] : []});
+    }
+
+    public async setAttendeesCourses(attendee: Attendee, courseIds: number[]) {
+        const courses: Course[] = [];
+        const classes: string[] = [];
+        const timeslots: number[] = [];
+
+        if (courseIds.length !== 3) {
+            throw new BadRequest('Excatly 3 course have to be chosen.');
+        }
+
+        // map courseIds to course
+        for (const courseId of courseIds) {
+            courses.push(await this.courseService.getCourseById(courseId));
+        }
+
+        const oldCourses = attendee.courses;
+        attendee.courses = [];
+        await this.repo.save(attendee);
+
+        // check: Only one course per class and only one course per timeslot
+        // check: course not full
+        for (const course of courses) {
+            if (classes.includes(course.class) || timeslots.includes(course.timeSlot)) {
+                attendee.courses = oldCourses;
+                await this.repo.save(attendee);
+
+                throw new BadRequest('Each class can only be chosen once or timeslot is double occupied.');
+            } else {
+                classes.push(course.class);
+                timeslots.push(course.timeSlot);
+            }
+
+            if (course.maxAttendee - await this.courseService.countAttendeesForCourse(course) < 1) {
+                attendee.courses = oldCourses;
+                await this.repo.save(attendee);
+
+                throw new BadRequest('Course ' + course.name + ' is full :-(');
+            }
+
+        }
+
+        // check: Sek2 course must be chosen
+        if (!classes.includes('sek2')) {
+            attendee.courses = oldCourses;
+            await this.repo.save(attendee);
+
+            throw new BadRequest('Sek2 course must be chosen');
+        }
+
+        attendee.courses = courses;
+        await this.repo.save(attendee);
     }
 }
