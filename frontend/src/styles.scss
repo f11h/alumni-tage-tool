@@ -4,3 +4,13 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+// make spinners inside of buttons inline-block
+button {
+  > span {
+    > mat-spinner {
+      display: inline-block !important;
+      margin-right: 10px;
+    }
+  }
+}

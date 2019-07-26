@@ -1,0 +1,16 @@
+INSERT INTO att.attendee (id, name, token, password) VALUES (1, 'Felix Dittrich', 'red awesome tiger', 'xyz');
+INSERT INTO att.course (id, name, description, maxAttendee, mandatory, class, timeSlot) VALUES (1, 'Punktesystem Abitur', 'Fr. Scharfenberg gibt eine Einführung in das Punktesystem für das Abitur. Dieser Kurs muss einmal belegt werden.', 25, 1, 'sek2', 1);
+INSERT INTO att.course (id, name, description, maxAttendee, mandatory, class, timeSlot) VALUES (2, 'Punktesystem Abitur', 'Fr. Scharfenberg gibt eine Einführung in das Punktesystem für das Abitur. Dieser Kurs muss einmal belegt werden.', 25, 1, 'sek2', 2);
+INSERT INTO att.course (id, name, description, maxAttendee, mandatory, class, timeSlot) VALUES (3, 'Punktesystem Abitur', 'Fr. Scharfenberg gibt eine Einführung in das Punktesystem für das Abitur. Dieser Kurs muss einmal belegt werden.', 25, 1, 'sek2', 3);
+INSERT INTO att.course (id, name, description, maxAttendee, mandatory, class, timeSlot) VALUES (52, 'Wohnen und Leben', 'tbd', 25, 0, 'wul', 1);
+INSERT INTO att.course (id, name, description, maxAttendee, mandatory, class, timeSlot) VALUES (53, 'Wohnen und Leben', 'tbd', 25, 0, 'wul', 2);
+INSERT INTO att.course (id, name, description, maxAttendee, mandatory, class, timeSlot) VALUES (54, 'Wohnen und Leben', 'tbd', 25, 0, 'wul', 3);
+INSERT INTO att.course (id, name, description, maxAttendee, mandatory, class, timeSlot) VALUES (55, '(duales) Studium und Ausbildung', 'tbd', 25, 0, 'sua', 1);
+INSERT INTO att.course (id, name, description, maxAttendee, mandatory, class, timeSlot) VALUES (56, '(duales) Studium und Ausbildung', 'tbd', 25, 0, 'sua', 2);
+INSERT INTO att.course (id, name, description, maxAttendee, mandatory, class, timeSlot) VALUES (57, '(duales) Studium und Ausbildung', 'tbd', 25, 0, 'sua', 3);
+INSERT INTO att.course (id, name, description, maxAttendee, mandatory, class, timeSlot) VALUES (58, 'Nach dem Abi ins Ausland', 'tbd', 25, 0, 'aus', 1);
+INSERT INTO att.course (id, name, description, maxAttendee, mandatory, class, timeSlot) VALUES (59, 'Nach dem Abi ins Ausland', 'tbd', 25, 0, 'aus', 2);
+INSERT INTO att.course (id, name, description, maxAttendee, mandatory, class, timeSlot) VALUES (60, 'Nach dem Abi ins Ausland', 'tbd', 25, 0, 'aus', 3);
+INSERT INTO att.course_attendees_attendee (courseId, attendeeId) VALUES (1, 1);
+INSERT INTO att.course_attendees_attendee (courseId, attendeeId) VALUES (53, 1);
+INSERT INTO att.course_attendees_attendee (courseId, attendeeId) VALUES (57, 1);

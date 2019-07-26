@@ -25,15 +25,24 @@ export class AttendeeService implements OnServerReady {
         return this.repo.find({relations: ['courses']});
     }
 
-    public getAttendeeByToken(token: string): Promise<Attendee> {
+    public getAttendeeByTokenOrFail(token: string): Promise<Attendee> {
         return this.repo.findOneOrFail({where: {token}, relations: ['courses']});
     }
 
+    public getAttendeeByToken(token: string): Promise<Attendee> {
+        return this.repo.findOne({where: {token}, relations: ['courses']});
+    }
+
     public getAttendeeById(id: number, withCourses?: boolean): Promise<Attendee> {
-        return this.repo.findOneOrFail(id, { relations: withCourses ? ['courses'] : []});
+        return this.repo.findOneOrFail(id, {relations: withCourses ? ['courses'] : []});
     }
 
     public async createAttendee(attendee: Attendee): Promise<Attendee> {
+        attendee.id = null;
+        return this.repo.save(attendee);
+    }
+
+    public async saveAttendee(attendee: Attendee): Promise<Attendee> {
         return this.repo.save(attendee);
     }
 
@@ -42,8 +51,8 @@ export class AttendeeService implements OnServerReady {
         const classes: string[] = [];
         const timeslots: number[] = [];
 
-        if (courseIds.length !== 3) {
-            throw new BadRequest('Excatly 3 course have to be chosen.');
+        if (courseIds.length !== 3 && courseIds.length !== 0) {
+            throw new BadRequest('Excatly 3 or 0 course have to be chosen.');
         }
 
         // map courseIds to course
@@ -78,7 +87,7 @@ export class AttendeeService implements OnServerReady {
         }
 
         // check: Sek2 course must be chosen
-        if (!classes.includes('sek2')) {
+        if (courseIds.length !== 0 && !classes.includes('sek2')) {
             attendee.courses = oldCourses;
             await this.repo.save(attendee);
 

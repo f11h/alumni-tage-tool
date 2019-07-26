@@ -1,53 +1,117 @@
 <div fxLayout="row" fxLayoutAlign="center">
-    <div fxFlex="0 0 40%" fxShow.gt-md fxHide>
-        <mat-horizontal-stepper [linear]="true">
-           <mat-step label="Anmelden">
-               <ng-container *ngTemplateOutlet="step1"></ng-container>
-           </mat-step>
-            <mat-step label="Kurse wählen">
-                <ng-container *ngTemplateOutlet="step2"></ng-container>
+    <div fxFlex="0 0 100%" fxFlex.gt-md="0 0 40%">
+        <mat-vertical-stepper [linear]="true" #stepper>
+            <ng-template matStepperIcon="login">
+                <mat-icon>vpn_key</mat-icon>
+            </ng-template>
+            <mat-step label="Anmelden" [completed]="step1Completed" [editable]="false" [state]="'login'">
+                <p>
+                    Liebe Schülerin,<br>Lieber Schüler,
+                </p>
+                <p>
+                    Es ist wieder so weit: Die alljährlichen Alumni-Tage stehen an. In diesem Jahr möchten wir etwas
+                    Neues
+                    ausprobieren: Nicht wir oder die Lehrer, sondern DU sollst bestimmen, welche Kurse Du am 07.08.2019
+                    besuchen wirst.
+                </p>
+                <p>
+                    Gib bitte zunächst Deinen persönlichen Zugangscode ein und wähle dann im nächsten Schritt die für
+                    dich interessanten Kurse aus.
+                </p>
+                <form [formGroup]="loginForm">
+                    <mat-form-field class="fullwidth">
+                        <input matInput placeholder="Zugangscode" formControlName="token">
+                    </mat-form-field>
+                    <button color="accent" mat-raised-button [disabled]="loginForm.invalid || loginInProgress"
+                            (click)="login(stepper)">
+                        <mat-spinner [diameter]="20" *ngIf="loginInProgress"></mat-spinner>&nbsp;
+                        Anmelden
+                    </button>
+                </form>
             </mat-step>
-            <mat-step label="Absenden">
-                <ng-container *ngTemplateOutlet="step3"></ng-container>
+            <mat-step label="Name eingeben" [completed]="step2Completed" [editable]="false">
+                <p>
+                    Bitte gib Deinen Namen ein, damit wir wissen wer die Kurse besucht.
+                </p>
+                <form [formGroup]="nameForm">
+                    <mat-form-field class="fullwidth">
+                        <input matInput placeholder="Name" formControlName="name">
+                    </mat-form-field>
+                    <button color="accent" mat-raised-button [disabled]="nameForm.invalid || saveNameInProgress"
+                            (click)="saveName(stepper)">
+                        <mat-spinner [diameter]="20" *ngIf="saveNameInProgress"></mat-spinner>&nbsp;
+                        Weiter
+                    </button>
+                </form>
             </mat-step>
-
-        </mat-horizontal-stepper>
-    </div>
-
-    <div fxFlex="0 0 100%" fxHide.gt-md>
-        <mat-vertical-stepper [linear]="true">
-           <mat-step label="Anmelden">
-               <ng-container *ngTemplateOutlet="step1"></ng-container>
-           </mat-step>
-            <mat-step label="Kurse wählen">
-                <ng-container *ngTemplateOutlet="step2"></ng-container>
+            <mat-step label="Kurse wählen" [completed]="step3Completed">
+                <p>
+                    Bitte wähle 2 der vom Alumni Lenne e.V. angebotene Kurse aus. Zusätzlich musst Du auch einmal den Kurs zur
+                    Einführung in das Abiturpunktesystem von Fr. Scharfenberg wählen.
+                </p>
+                <mat-accordion>
+                    <form [formGroup]="selectedCourseForm">
+                        <mat-expansion-panel *ngFor="let timeslot of [1,2,3]">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    {{ timeslot }}. Block
+                                </mat-panel-title>
+                                <mat-panel-description>
+                                    <ng-container
+                                            *ngIf="selectedCourseForm.get(timeslot.toString()).value else noCourseSelected">{{ selectedCourseForm.get(timeslot.toString()).value.name }}</ng-container>
+                                    <ng-template #noCourseSelected>Bitte Kurs wählen</ng-template>
+                                </mat-panel-description>
+                            </mat-expansion-panel-header>
+                            <mat-radio-group [formControlName]="timeslot.toString()">
+                                <div *ngFor="let course of filterCoursesByTimeslot(timeslot)" class="course-entry">
+                                    <mat-radio-button [value]="course" [disabled]="course.maxAttendee - course.attendeeCount === 0">
+                                        <div>{{ course.name }}</div>
+                                        <div class="mat-hint">{{ course.description }}</div>
+                                        <div class="mat-hint remaining-slots"
+                                             *ngIf="course.maxAttendee - course.attendeeCount > 5">
+                                            Noch {{ course.maxAttendee - course.attendeeCount }} freie Plätze
+                                        </div>
+                                        <div class="mat-hint remaining-slots warn"
+                                             *ngIf="course.maxAttendee - course.attendeeCount <= 5 && course.maxAttendee - course.attendeeCount > 0">
+                                            Nur noch {{ course.maxAttendee - course.attendeeCount }} freie Plätze
+                                        </div>
+                                        <div class="mat-hint remaining-slots warn"
+                                             *ngIf="course.maxAttendee - course.attendeeCount === 0">Keine freien Plätze
+                                        </div>
+                                    </mat-radio-button>
+                                </div>
+                            </mat-radio-group>
+                        </mat-expansion-panel>
+                    </form>
+                </mat-accordion>
+                <div class="edit-controls" *ngIf="sek2Error">
+                    <p class="mat-hint warn edit-controls">
+                        Du musst ein Mal den Kurs Punktesystem Abitur auswählen!
+                    </p>
+                </div>
+                <div class="edit-controls" *ngIf="doubleError">
+                    <p class="mat-hint warn edit-controls">
+                        Du hast einen oder mehrere Kurse mehrfach ausgewählt!
+                    </p>
+                </div>
+                <div class="edit-controls" *ngIf="selectedCourseForm.enabled && selectedCourseForm.valid && !sek2Error && !doubleError">
+                    <p class="mat-hint edit-controls">
+                        Super! Deine Auswahl ist komplett. Speichere bitte nun deine gewünschte Kursbelegung.
+                    </p>
+                    <button mat-raised-button color="accent" (click)="submitCourses()" [disabled]="submitCoursesInProgress">
+                        <mat-spinner [diameter]="20" *ngIf="submitCoursesInProgress"></mat-spinner>&nbsp;
+                        Kursbelegung speichern</button>
+                </div>
+                <div class="edit-controls" *ngIf="attendee && attendee.courses && attendee.courses.length > 0">
+                    <p class="mat-hint edit-controls">
+                        Du hast Deine Kurse bereits gewählt. Um deine Belegung nocheinmal zu bearbeiten, musst Du diese zunächst löschen und kannst Deine gewünschten Kurse dann neu belegen.
+                    </p>
+                    <button mat-raised-button color="warn" (click)="submitCourses(true)">
+                        <mat-spinner [diameter]="20" *ngIf="submitCoursesInProgress"></mat-spinner>&nbsp;
+                        Kursbelegung löschen
+                    </button>
+                </div>
             </mat-step>
-            <mat-step label="Absenden" disabled="true">
-                <ng-container *ngTemplateOutlet="step3"></ng-container>
-            </mat-step>
-
         </mat-vertical-stepper>
     </div>
 </div>
-
-
-<ng-template #step1>
-        <p>
-            Liebe Schülerin,<br>Lieber Schüler,
-        </p>
-        <p>
-            Es ist wieder soweit: Die alljährlichen Alumni-Tage stehen an. In diesem Jahr möchten wir etwas Neues
-            ausprobieren: Nicht wir oder die Lehrer, sondern DU sollst bestimmen, welche Kurse Du am 05.08.2019 besuchen wirst.
-        </p>
-        <p>
-            Gib bitte zunächst Deinen persönlichen Zugangscode ein und wähle dann im nächsten Schritt die für dich interessanten Kurse aus.
-        </p>
-</ng-template>
-
-<ng-template #step2>
-    Schritt 2
-</ng-template>
-
-<ng-template #step3>
-    Schritt 3
-</ng-template>

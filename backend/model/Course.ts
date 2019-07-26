@@ -25,6 +25,7 @@ export class Course {
 
     @ManyToMany(() => Attendee, attendee => attendee.courses)
     @JoinTable()
+    @Property()
     attendees: Attendee[];
 
     @Property()

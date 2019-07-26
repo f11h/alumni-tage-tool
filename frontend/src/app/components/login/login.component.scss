@@ -1,0 +1,23 @@
+.fullwidth {
+  width: 100%;
+}
+
+.course-entry {
+  padding-top: 20px;
+}
+
+.remaining-slots {
+  padding-top: 5px;
+}
+
+.edit-controls {
+  padding-top: 20px;
+}
+
+.warn {
+  color: #ff0000;
+}
+
+::ng-deep .mat-radio-label {
+  white-space: normal !important;
+}

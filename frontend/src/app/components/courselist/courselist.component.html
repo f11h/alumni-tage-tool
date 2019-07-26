@@ -1,0 +1,18 @@
+<div class="main-div">
+    <p>
+        <mat-form-field>
+            <mat-label>Kurs</mat-label>
+            <mat-select>
+                <mat-option *ngFor="let course of courses" [value]="course"
+                            (onSelectionChange)="selectedCourse=$event.source.value">
+                    {{ course.name }} im {{ course.timeSlot }}.Block
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </p>
+    <div *ngIf="selectedCourse">
+        <p *ngFor="let attendee of selectedCourse.attendees">
+            {{ attendee.name }}
+        </p>
+    </div>
+</div>
