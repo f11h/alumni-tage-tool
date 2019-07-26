@@ -4,5 +4,17 @@
 
 .token-card {
   border: 2px solid black;
-  //height: 80px;
+  margin-bottom: 20px;
+  font-size: 11pt;
+  p {
+    margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
+  }
+  page-break-inside: avoid;
+}
+
+@media print {
+  #flexcontainer {
+    display: block !important;
+  }
 }
