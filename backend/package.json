@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "description": "Ein kleines Tool zum tokenbasierten Einschreiben in angebotene Kurse des Alumni Lenné e.V. zu den alljährlichen Alumni Tagen",
   "scripts": {
-    "start": "nodemon --watch **/* -e ts --ignore 'node_modules/**/*' --exec ts-node --project tsconfig.json index.ts"
+    "start": "nodemon --watch **/* -e ts --ignore 'node_modules/**/*' --exec ts-node --project tsconfig.json index.ts",
+    "build": "tsc -p tsconfig.json"
   },
   "repository": {
     "type": "git",

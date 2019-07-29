@@ -10,7 +10,7 @@ import {Attendee} from '@backend/Attendee';
 })
 export class TokenlistComponent implements OnInit {
 
-    private attendees: Attendee[] = [];
+    public attendees: Attendee[] = [];
 
     constructor(
         private shared: SharedService,

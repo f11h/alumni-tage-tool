@@ -2,9 +2,12 @@ import {GlobalAcceptMimesMiddleware, ServerLoader, ServerSettings} from '@tsed/c
 import "@tsed/typeorm";
 
 @ServerSettings({
+    statics: {
+        "/": `${__dirname}/frontend_files`
+    },
     rootDir: __dirname,
     acceptMimes: ['application/json'],
-    password: "sss",
+    password: process.env.ATT_AUTH || "ultrasecuresecret",
     typeorm: [
         {
             name: 'default',
