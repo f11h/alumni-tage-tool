@@ -8,6 +8,6 @@ export class SharedService {
   constructor() { }
 
   public buildApiUrl(...params: string[]): string {
-    return '/rest/' + params.join('/');
+    return 'rest/' + params.join('/');
   }
 }

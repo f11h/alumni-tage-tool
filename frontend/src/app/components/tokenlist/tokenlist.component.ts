@@ -28,6 +28,6 @@ export class TokenlistComponent implements OnInit {
     }
 
     getQrCodeUrl(attendee: Attendee) {
-        return 'https://tools.alumni-lenne.de/att?token=' + btoa(attendee.token);
+        return 'https://tools.alumni-lenne.de/att/?token=' + btoa(attendee.token);
     }
 }
