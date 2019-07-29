@@ -28,6 +28,12 @@ export class TokenlistComponent implements OnInit {
     }
 
     getQrCodeUrl(attendee: Attendee) {
-        return 'https://tools.alumni-lenne.de/att/?token=' + btoa(attendee.token);
+        return 'https://tools.alumni-lenne.de/att/?token=' + btoa(this.capitalizeString(attendee.token));
+    }
+
+    public capitalizeString(inp: string): string {
+        return inp.split(" ")
+            .map(s => s[0].toUpperCase() + s.slice(1))
+            .join(" ");
     }
 }

@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit {
         this.loginInProgress = true;
 
         forkJoin(
-            this.http.get<Attendee[]>(this.shared.buildApiUrl('attendees'), {params: {token: this.loginForm.get('token').value}}),
+            this.http.get<Attendee[]>(this.shared.buildApiUrl('attendees'), {params: {token: this.loginForm.get('token').value.toLowerCase()}}),
             this.http.get<Course[]>(this.shared.buildApiUrl('courses'))
         ).subscribe(([attendees, courses]) => {
             if (attendees.length === 1) {
