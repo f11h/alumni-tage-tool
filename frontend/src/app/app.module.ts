@@ -13,15 +13,16 @@ import {
     MatInputModule,
     MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSnackBarModule,
     MatStepperModule,
-    MatToolbarModule
+    MatToolbarModule,
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import {ReactiveFormsModule} from '@angular/forms';
-import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
-import {HttpClientModule} from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { HttpClientModule } from '@angular/common/http';
 import { CourselistComponent } from './components/courselist/courselist.component';
 import { TokenlistComponent } from './components/tokenlist/tokenlist.component';
-import {QRCodeModule} from 'angularx-qrcode';
+import { QRCodeModule } from 'angularx-qrcode';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
     declarations: [
@@ -54,8 +55,12 @@ import {QRCodeModule} from 'angularx-qrcode';
     providers: [
         {
             provide: STEPPER_GLOBAL_OPTIONS,
-            useValue: { displayDefaultIndicatorType: false }
-        }
+            useValue: { displayDefaultIndicatorType: false },
+        },
+        {
+            provide: LocationStrategy,
+            useClass: HashLocationStrategy,
+        },
     ],
     bootstrap: [
         AppComponent,

@@ -28,7 +28,7 @@ export class TokenlistComponent implements OnInit {
     }
 
     getQrCodeUrl(attendee: Attendee) {
-        return 'https://tools.alumni-lenne.de/att/?token=' + btoa(this.capitalizeString(attendee.token));
+        return 'https://tools.alumni-lenne.de/att/#?token=' + btoa(this.capitalizeString(attendee.token));
     }
 
     public capitalizeString(inp: string): string {
