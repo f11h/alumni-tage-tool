@@ -35,7 +35,7 @@
           },
           "configurations": {
             "production": {
-              "outputPath": "../backend/dist/frontend_files",
+              "outputPath": "../dist/frontend_files",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
