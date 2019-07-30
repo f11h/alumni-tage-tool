@@ -14,8 +14,10 @@ export class Course {
     @Property()
     name: string;
 
-    @Column()
-    @MaxLength(200)
+    @Column({
+        length: 300
+    })
+    @MaxLength(300)
     @Property()
     description: string;
 
